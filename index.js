@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
-// middleware
+// Middleware
 const corsOptions = {
   origin: "*",
   credentials: true,
@@ -44,13 +44,22 @@ async function run() {
       res.send(result);
     });
 
-    // get all rooms
+    // Get user
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await usersCollection.findOne(query);
+      console.log(result);
+      res.send(result);
+    });
+
+    // Get all rooms
     app.get("/rooms", async (req, res) => {
       const result = await roomsCollection.find().toArray();
       res.send(result);
     });
 
-    // get single room
+    // Get single room
     app.get("/room/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -59,7 +68,7 @@ async function run() {
       res.send(result);
     });
 
-    // save a room in database
+    // Save a room in database
     app.post("/rooms", async (req, res) => {
       const room = req.body;
       console.log(room);
